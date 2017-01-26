@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8" />
+
+	<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.0.min.js"></script>
+	<script src="http://ajax.aspnetcdn.com/ajax/signalr/jquery.signalr-2.2.0.min.js"></script>
+	<script src="/signalr/hubs"></script>
+</head>
+<body>
+
+	<input id="userNameInput" type="text" placeholder="Name" />
+	<input id="textInput" type="text" placeholder="Todo" />
+
+	<button id="createTodoBtn">Create Todo</button>
+
+	<ul id="todoList"></ul>
+
+	<script type="text/javascript">
+        $.ajax({
+            url: '/api/todos',
+            method: 'GET',
+            dataType: 'JSON',
+            success: populateList
+        });
+
+        function populateList(todos) {
+            $.each(todos, function (index) {
+                var todo = todos[index];
+                addTodo(todo);
+            });
+        }
+
+        function addTodo(todo) {
+            $("#todoList").append(
+                    '<li><b>' + todo.owner+ '</b><br>' + todo.task+ '</li><br>'
+                 );
+        }
+
+        var hub = $.connection.todoHub;
+
+        hub.client.publishTodo = addTodo;
+
+        $("#createTodoBtn").click(function () {
+
+            var todo = {
+                owner: $("#userNameInput").val() || "Guest",
+                task: $("#textInput").val()
+            };
+            $.ajax({
+                url: '/api/todos',
+                method: 'POST',
+                data: todo
+            });
+        });
+
+        $.connection.hub.logging = true;
+        $.connection.hub.start();
+	</script>
+</body>
+</html>

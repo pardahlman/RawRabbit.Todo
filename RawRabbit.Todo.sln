@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2BA0E34E-D47A-4470-B1FE-A063666F3A29}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9FC5B924-9BBF-46D7-96E1-568F211BA14A}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+		NuGet.config = NuGet.config
+	EndProjectSection
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "RawRabbit.Todo.Shared", "src\RawRabbit.Todo.Shared\RawRabbit.Todo.Shared.xproj", "{4B34CAD9-6B37-4F88-B0E4-02CB92071D18}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "RawRabbit.Todo.Web", "src\RawRabbit.Todo.Web\RawRabbit.Todo.Web.xproj", "{C370797A-F4FC-428E-9875-8903AFB2FFBA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4B34CAD9-6B37-4F88-B0E4-02CB92071D18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B34CAD9-6B37-4F88-B0E4-02CB92071D18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B34CAD9-6B37-4F88-B0E4-02CB92071D18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B34CAD9-6B37-4F88-B0E4-02CB92071D18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C370797A-F4FC-428E-9875-8903AFB2FFBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C370797A-F4FC-428E-9875-8903AFB2FFBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C370797A-F4FC-428E-9875-8903AFB2FFBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C370797A-F4FC-428E-9875-8903AFB2FFBA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4B34CAD9-6B37-4F88-B0E4-02CB92071D18} = {2BA0E34E-D47A-4470-B1FE-A063666F3A29}
+		{C370797A-F4FC-428E-9875-8903AFB2FFBA} = {2BA0E34E-D47A-4470-B1FE-A063666F3A29}
+	EndGlobalSection
+EndGlobal
