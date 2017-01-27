@@ -1,0 +1,27 @@
+{
+	"version": "1.0.0-*",
+	"buildOptions": {
+		"emitEntryPoint": true
+	},
+
+	"dependencies": {
+		"RawRabbit.Todo.Shared": { "target": "project" },
+		"RawRabbit.Logging.Serilog": "2.0.0-2.0-local",
+		"RawRabbit.Enrichers.MessageContext.Subscribe": "2.0.0-2.0-local",
+		"RawRabbit": "2.0.0-2.0-local",
+		"RawRabbit.Operations.Publish": "2.0.0-2.0-local",
+		"RabbitMQ.Client": "4.1.1",
+			"Microsoft.NETCore.App": {
+				"type": "platform",
+				"version": "1.0.1"
+			},
+    "RawRabbit.Operations.Respond": "2.0.0-2.0-local",
+    "RawRabbit.Enrichers.MessageContext": "2.0.0-2.0-local"
+	},
+
+	"frameworks": {
+		"netcoreapp1.0": {
+			"imports": "dnxcore50"
+		}
+	}
+}

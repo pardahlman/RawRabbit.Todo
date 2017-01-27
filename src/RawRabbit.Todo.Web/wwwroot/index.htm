@@ -1,62 +1,93 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-	<title></title>
 	<meta charset="utf-8" />
-
 	<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.0.min.js"></script>
 	<script src="http://ajax.aspnetcdn.com/ajax/signalr/jquery.signalr-2.2.0.min.js"></script>
 	<script src="/signalr/hubs"></script>
 </head>
 <body>
+	<h1>Todos</h1>
+	<h2>Detailed View</h2>
+	<input id="todoIdInput" type="text" placeholder="Todo id (int)" />
+	<button id="getTodoBtn">Get Todo</button>
+	<div id="detailed"></div>
 
-	<input id="userNameInput" type="text" placeholder="Name" />
-	<input id="textInput" type="text" placeholder="Todo" />
-
+	<h2> Create new</h2>
+	<input id="userNameInput" type="text" placeholder="Owner" />
+	<input id="textInput" type="text" placeholder="Todo task" />
 	<button id="createTodoBtn">Create Todo</button>
 
+	<h2>Todo List</h2>
+	<button id="getAllBtn">Get All</button>
 	<ul id="todoList"></ul>
 
+	<h2>Notifications</h2>
+	<p>Notifications are sent whenever a new Owner is introduced.</p>
+	<ul id="notificationList"></ul>
+
 	<script type="text/javascript">
-        $.ajax({
-            url: '/api/todos',
-            method: 'GET',
-            dataType: 'JSON',
-            success: populateList
-        });
+		function populateList(todos) {
+			$("#todoList").empty();
+			$.each(todos, function (index) {
+				var todo = todos[index];
+				addTodo(todo);
+			});
+		}
 
-        function populateList(todos) {
-            $.each(todos, function (index) {
-                var todo = todos[index];
-                addTodo(todo);
-            });
-        }
-
-        function addTodo(todo) {
-            $("#todoList").append(
-                    '<li><b>' + todo.owner+ '</b><br>' + todo.task+ '</li><br>'
+		function addTodo(todo) {
+			$("#todoList").append(
+                    '<li><b>' + todo.owner + '</b><br>' + todo.task + '</li><br>'
                  );
-        }
+		}
 
-        var hub = $.connection.todoHub;
+		function addNotification(notification) {
+			$("#notificationList").append(
+					'<li><i>' + notification.message + '</i><br>' + notification.time + '</li><br>'
+			);
+		}
 
-        hub.client.publishTodo = addTodo;
+		var hub = $.connection.todoHub;
 
-        $("#createTodoBtn").click(function () {
+		hub.client.publishTodo = addTodo;
+		hub.client.populateList = populateList;
+		hub.client.publishNotification = addNotification;
 
-            var todo = {
-                owner: $("#userNameInput").val() || "Guest",
-                task: $("#textInput").val()
-            };
-            $.ajax({
-                url: '/api/todos',
-                method: 'POST',
-                data: todo
-            });
-        });
+		$("#createTodoBtn").click(function () {
 
-        $.connection.hub.logging = true;
-        $.connection.hub.start();
+			var todo = {
+				owner: $("#userNameInput").val() || "Guest",
+				task: $("#textInput").val()
+			};
+			$.ajax({
+				url: '/api/todos',
+				method: 'POST',
+				data: todo
+			});
+		});
+		$("#getTodoBtn").click(function () {
+
+			$.ajax({
+				url: '/api/todos/' + $("#todoIdInput").val(),
+				method: 'Get',
+				success: function (resp) {
+					var $detailed = $('#detailed');
+					$detailed.empty();
+					$detailed.append('Task:' + resp.todo.task + ', Id: ' + resp.todo.id);
+				}
+			});
+		});
+		$("#getAllBtn").click(function () {
+			$.ajax({
+				url: '/api/todos',
+				method: 'GET',
+				dataType: 'JSON'
+			});
+		});
+
+		$.connection.hub.logging = true;
+		$.connection.hub.start();
+		
 	</script>
 </body>
 </html>

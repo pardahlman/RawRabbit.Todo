@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -13,7 +14,22 @@ namespace RawRabbit.Todo.Shared.Repo
 
 		public TodoRepository()
 		{
-			_todos = new ConcurrentDictionary<int, Todo>();
+			_todos = new ConcurrentDictionary<int, Todo>
+			{
+				[0] = new Todo
+				{
+					Id = 0,
+					Task = "Documentation for RawRabbit 2.0",
+					Owner = "pardahlman"
+				},
+				[1] = new Todo
+				{
+					Id = 1,
+					Task = "Release RawRabbit 2.0",
+					Owner = "pardahlman"
+				}
+			};
+			_count = _todos.Count - 1;
 		}
 
 		public Task<List<Todo>> GetAllAsync()
@@ -27,12 +43,21 @@ namespace RawRabbit.Todo.Shared.Repo
 			return Task.FromResult(todo);
 		}
 
-		public Task<Todo> CreateAsync(Todo todo)
+		public Task<Todo> AddAsync(Todo todo)
 		{
 			var id = Interlocked.Increment(ref _count);
 			todo.Id = id;
 			_todos.TryAdd(id, todo);
 			return Task.FromResult(todo);
+		}
+
+		public Task<List<Todo>> QueryAsync(Predicate<Todo> predicate)
+		{
+			var result = _todos
+				.Where(t => predicate(t.Value))
+				.Select(kvp => kvp.Value)
+				.ToList();
+			return Task.FromResult(result);
 		}
 	}
 }

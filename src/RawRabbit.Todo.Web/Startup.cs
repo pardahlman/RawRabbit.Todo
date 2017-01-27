@@ -1,11 +1,17 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using RawRabbit.Enrichers.MessageContext;
+using RawRabbit.Todo.Shared;
 using RawRabbit.Todo.Shared.Repo;
+using RawRabbit.Todo.Web.Controllers;
 using RawRabbit.Todo.Web.Serialization;
+using RawRabbit.vNext;
+using RawRabbit.vNext.Pipe;
 
 namespace RawRabbit.Todo.Web
 {
@@ -28,6 +34,10 @@ namespace RawRabbit.Todo.Web
 		{
 			// Add framework services.
 			services.AddMvc();
+			services.AddRawRabbit(new RawRabbitOptions
+			{
+				Plugins = p => p.UseMessageContext<TodoContext>()
+			});
 			services.AddSignalR(options =>
 			{
 				options.Hubs.EnableDetailedErrors = true;
@@ -58,8 +68,19 @@ namespace RawRabbit.Todo.Web
 				app.UseExceptionHandler("/Home/Error");
 			}
 
+			app.Use((context, func) =>
+			{
+				if (context.Request.Cookies.ContainsKey(BaseController.SessionCookie))
+				{
+					return func();
+				}
+				var sessionId = Guid.NewGuid().ToString("D");
+				context.Response.Cookies.Append(BaseController.SessionCookie, sessionId);
+				return func();
+			});
 			app.UseStaticFiles();
 			app.UseDefaultFiles();
+
 
 			app.UseMvc(routes =>
 			{

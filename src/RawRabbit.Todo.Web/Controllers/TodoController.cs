@@ -1,36 +1,34 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR.Infrastructure;
+using RawRabbit.Todo.Shared.Messages;
 using RawRabbit.Todo.Shared.Repo;
 using RawRabbit.Todo.Web.Hubs;
 
 namespace RawRabbit.Todo.Web.Controllers
 {
-	public class TodoController : Controller
+	public class TodoController : BaseController
 	{
-		private readonly ITodoRepository _todoRepo;
-		private readonly IConnectionManager _connectionMgmt;
 
-		public TodoController(ITodoRepository todoRepo, IConnectionManager connectionMgmt)
+		public TodoController(IBusClient busClient) : base(busClient)
 		{
-			_todoRepo = todoRepo;
-			_connectionMgmt = connectionMgmt;
 		}
 
 		[HttpGet]
 		[Route("api/todos/")]
 		public async Task<IActionResult> GetAllTodos()
 		{
-			var todos = await _todoRepo.GetAllAsync();
-			return Ok(todos);
+			await PublishAsync(new CreateTodoList {Count = int.MaxValue});
+			return Ok(new {success = true});
 		}
 
 		[HttpGet]
 		[Route("api/todos/{id}")]
 		public async Task<IActionResult> GetTodo(int id)
 		{
-			var todo = await _todoRepo.GetAsync(id);
+			var todo = await BusClient.RequestAsync<TodoRequest, TodoResponse>(new TodoRequest {Id = id});
 			if (todo == null)
 			{
 				return NotFound();
@@ -42,9 +40,8 @@ namespace RawRabbit.Todo.Web.Controllers
 		[Route("api/todos")]
 		public async Task<IActionResult> CreateTodo(Shared.Todo todo)
 		{
-			var created = await _todoRepo.CreateAsync(todo);
-			_connectionMgmt.GetHubContext<TodoHub>().Clients.All.publishTodo(todo);
-			return Created(new Uri($"/api/todo/{created.Id}"), todo);
+			await PublishAsync(new CreateTodo {Todo = todo});
+			return Ok(new {success = true});
 		}
 	}
 }
