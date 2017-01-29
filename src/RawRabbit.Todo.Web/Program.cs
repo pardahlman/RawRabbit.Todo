@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using RawRabbit.Todo.Shared;
 using RawRabbit.Todo.Shared.Messages;
 using RawRabbit.Todo.Shared.Repo;
-using RawRabbit.Todo.Web.Hubs;
+using RawRabbit.Todo.Web.SignalR;
 
 namespace RawRabbit.Todo.Web
 {
@@ -21,25 +21,10 @@ namespace RawRabbit.Todo.Web
 				.UseStartup<Startup>()
 				.Build();
 
-			var busClient = host.Services.GetService<IBusClient>();
-			var connectionMgmt = host.Services.GetService<IConnectionManager>();
-			busClient.SubscribeAsync<TodoCreated, TodoContext>((created, context) =>
-			{
-				connectionMgmt.GetHubContext<TodoHub>().Clients.All.publishTodo(created.Todo);
-				return Task.CompletedTask;
-			});
-
-			busClient.SubscribeAsync<NotifyClients>(notificatoin =>
-			{
-				connectionMgmt.GetHubContext<TodoHub>().Clients.All.publishNotification(notificatoin);
-				return Task.CompletedTask;
-			});
-
-			busClient.SubscribeAsync<TodoListCreated, TodoContext>((list, context) =>
-			{
-				connectionMgmt.GetHubContext<TodoHub>().Clients.Group(context.SessionId).populateList(list.Todos);
-				return Task.CompletedTask;
-			});
+			new ClientInvokation(host.Services)
+				.StartAsync()
+				.GetAwaiter()
+				.GetResult();
 
 			host.Run();
 		}

@@ -9,7 +9,7 @@ using RawRabbit.Enrichers.MessageContext;
 using RawRabbit.Todo.Shared;
 using RawRabbit.Todo.Shared.Repo;
 using RawRabbit.Todo.Web.Controllers;
-using RawRabbit.Todo.Web.Serialization;
+using RawRabbit.Todo.Web.SignalR;
 using RawRabbit.vNext;
 using RawRabbit.vNext.Pipe;
 

@@ -36,7 +36,6 @@ namespace RawRabbit.Todo
 					.UseMessageContext<TodoContext>()
 			});
 
-			Console.WriteLine("Subscribing to Todo");
 			await busClient.SubscribeAsync<CreateTodo, TodoContext>(async (msg, context) =>
 			{
 				if (msg.Todo == null)
@@ -46,12 +45,12 @@ namespace RawRabbit.Todo
 				var created = await repo.AddAsync(msg.Todo);
 				await busClient.PublishAsync(new TodoCreated {Todo = created});
 				return new Ack();
-			}, ctx => ctx.UseConsumerRecovery(TimeSpan.FromHours(1)));
+			});
 
-			await busClient.SubscribeAsync<CreateTodo>(async (created) =>
+			await busClient.SubscribeAsync<TodoCreated, TodoContext>(async (created, args) =>
 				{
 					var allTodos = await repo.GetAllAsync();
-					var newOwner = allTodos.All(t => t.Owner != created.Todo.Owner);
+					var newOwner = !allTodos.Any(t => t.Id != created.Todo.Id && t.Owner == created.Todo.Owner);
 					if (newOwner)
 					{
 						await busClient.PublishAsync(new NotifyClients
@@ -65,16 +64,14 @@ namespace RawRabbit.Todo
 				.UseHostnameQueueSuffix()
 				.UseConsumerConfiguration(cfg => cfg
 					.Consume(c => c
-						.WithNoAck()
+						//.WithNoAck()
 						.WithPrefetchCount(1))
 					.FromDeclaredQueue(q => q
 						.WithName("todo_owner")
-						.WithAutoDelete()
+						//.WithAutoDelete()
 						.WithArgument(QueueArgument.DeadLetterExchange, "dlx")
 					))
 			);
-
-			Console.WriteLine("Subscribing to Todo RPC");
 
 			await busClient.RespondAsync<TodoRequest, TodoResponse>(async req =>
 			{
@@ -93,7 +90,6 @@ namespace RawRabbit.Todo
 				return new Nack(false);
 			});
 
-			Console.WriteLine("Done with it all.");
 			Console.ReadKey();
 		}
 	}

@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR.Infrastructure;
 using RawRabbit.Todo.Shared.Messages;
 using RawRabbit.Todo.Shared.Repo;
-using RawRabbit.Todo.Web.Hubs;
 
 namespace RawRabbit.Todo.Web.Controllers
 {

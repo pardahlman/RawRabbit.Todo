@@ -3,7 +3,7 @@ using System.Reflection;
 using Microsoft.AspNetCore.SignalR.Infrastructure;
 using Newtonsoft.Json.Serialization;
 
-namespace RawRabbit.Todo.Web.Serialization
+namespace RawRabbit.Todo.Web.SignalR
 {
 	public class SignalRContractResolver : IContractResolver
 	{
