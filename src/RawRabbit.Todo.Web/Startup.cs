@@ -81,8 +81,8 @@ namespace RawRabbit.Todo.Web
 				context.Response.Cookies.Append(BaseController.SessionCookie, sessionId);
 				return func();
 			});
-			app.UseStaticFiles();
 			app.UseDefaultFiles();
+			app.UseStaticFiles();
 
 
 			app.UseMvc(routes =>
