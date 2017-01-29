@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR.Infrastructure;
+using RawRabbit.Operations.MessageSequence;
+using RawRabbit.Todo.Shared;
 using RawRabbit.Todo.Shared.Messages;
-using RawRabbit.Todo.Shared.Repo;
 
 namespace RawRabbit.Todo.Web.Controllers
 {
 	public class TodoController : BaseController
 	{
-
 		public TodoController(IBusClient busClient) : base(busClient)
-		{
-		}
+		{ }
 
 		[HttpGet]
 		[Route("api/todos/")]
@@ -33,6 +29,28 @@ namespace RawRabbit.Todo.Web.Controllers
 				return NotFound();
 			}
 			return Ok(todo);
+		}
+
+		[HttpDelete]
+		[Route("api/todos/{id}")]
+		public async Task<IActionResult> RemoveTodo(int id)
+		{
+			var msg = string.Empty;
+			var removeSequence = BusClient.ExecuteSequence<TodoContext, TodoRemoved>(s => s
+				.PublishAsync(new RemoveTodo { Id = id})
+				.When<RemoveTodoFailed>((failed, ctx) =>
+				{
+					msg = failed.Message;
+					return Task.CompletedTask;
+				}, it => it.AbortsExecution())
+				.Complete<TodoRemoved>()
+			);
+			await removeSequence.Task;
+			if (removeSequence.Aborted)
+			{
+				return BadRequest(msg);
+			}
+			return Ok();
 		}
 
 		[HttpPost]

@@ -8,16 +8,17 @@
 </head>
 <body>
 	<h1>Todos</h1>
-	<h2>Detailed View</h2>
+	<h2>Todo actions</h2>
 	<input id="todoIdInput" type="text" placeholder="Todo id (int)" />
 	<button id="getTodoBtn">Get Todo</button>
+	<button id="removeTodoBtn">Remove Todo</button>
 	<div id="detailed"></div>
 
 	<h2> Create new</h2>
 	<input id="userNameInput" type="text" placeholder="Owner" />
 	<input id="textInput" type="text" placeholder="Todo task" />
 	<button id="createTodoBtn">Create Todo</button>
-
+	
 	<h2>Todo List</h2>
 	<button id="getAllBtn">Get All</button>
 	<ul id="todoList"></ul>
@@ -69,11 +70,28 @@
 
 			$.ajax({
 				url: '/api/todos/' + $("#todoIdInput").val(),
-				method: 'Get',
+				method: 'GET',
 				success: function (resp) {
 					var $detailed = $('#detailed');
 					$detailed.empty();
 					$detailed.append('Task:' + resp.todo.task + ', Id: ' + resp.todo.id);
+				}
+			});
+		});
+		$("#removeTodoBtn").click(function () {
+
+			$.ajax({
+				url: '/api/todos/' + $("#todoIdInput").val(),
+				method: 'DELETE',
+				success: function (resp) {
+					var $detailed = $('#detailed');
+					$detailed.empty();
+					$detailed.append('Todo successfully removed (List not updated)');
+				},
+				error : function(resp) {
+					var $detailed = $('#detailed');
+					$detailed.empty();
+					$detailed.append('Todo not removed: ' + resp.responseText);
 				}
 			});
 		});

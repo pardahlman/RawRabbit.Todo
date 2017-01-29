@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RawRabbit.Enrichers.MessageContext;
+using RawRabbit.Operations.StateMachine;
 using RawRabbit.Todo.Shared;
 using RawRabbit.Todo.Shared.Repo;
 using RawRabbit.Todo.Web.Controllers;
@@ -36,7 +37,9 @@ namespace RawRabbit.Todo.Web
 			services.AddMvc();
 			services.AddRawRabbit(new RawRabbitOptions
 			{
-				Plugins = p => p.UseMessageContext<TodoContext>()
+				Plugins = p => p
+					.UseMessageContext<TodoContext>()
+					.UseStateMachine()
 			});
 			services.AddSignalR(options =>
 			{

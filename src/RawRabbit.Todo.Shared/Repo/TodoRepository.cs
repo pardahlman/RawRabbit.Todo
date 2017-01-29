@@ -9,20 +9,20 @@ namespace RawRabbit.Todo.Shared.Repo
 {
 	public class TodoRepository : ITodoRepository
 	{
-		private readonly ConcurrentDictionary<int, Todo> _todos;
+		private readonly List<Todo> _todos;
 		private int _count;
 
 		public TodoRepository()
 		{
-			_todos = new ConcurrentDictionary<int, Todo>
+			_todos = new List<Todo>
 			{
-				[0] = new Todo
+				new Todo
 				{
 					Id = 0,
 					Task = "Documentation for RawRabbit 2.0",
 					Owner = "pardahlman"
 				},
-				[1] = new Todo
+				new Todo
 				{
 					Id = 1,
 					Task = "Release RawRabbit 2.0",
@@ -34,12 +34,22 @@ namespace RawRabbit.Todo.Shared.Repo
 
 		public Task<List<Todo>> GetAllAsync()
 		{
-			return Task.FromResult(_todos.Values.ToList());
+			return Task.FromResult(_todos);
 		}
 
 		public Task<Todo> GetAsync(int id)
 		{
-			var todo = _todos.Values.FirstOrDefault(t => t.Id == id);
+			var todo = _todos.FirstOrDefault(t => t.Id == id);
+			return Task.FromResult(todo);
+		}
+
+		public Task<Todo> RemoveAsync(int id)
+		{
+			var todo = _todos.FirstOrDefault(t => t.Id == id);
+			if (todo != null)
+			{
+				_todos.Remove(todo);
+			}
 			return Task.FromResult(todo);
 		}
 
@@ -47,15 +57,14 @@ namespace RawRabbit.Todo.Shared.Repo
 		{
 			var id = Interlocked.Increment(ref _count);
 			todo.Id = id;
-			_todos.TryAdd(id, todo);
+			_todos.Add(todo);
 			return Task.FromResult(todo);
 		}
 
 		public Task<List<Todo>> QueryAsync(Predicate<Todo> predicate)
 		{
 			var result = _todos
-				.Where(t => predicate(t.Value))
-				.Select(kvp => kvp.Value)
+				.Where(t => predicate(t))
 				.ToList();
 			return Task.FromResult(result);
 		}
