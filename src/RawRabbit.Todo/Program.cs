@@ -7,8 +7,10 @@ using Newtonsoft.Json;
 using RabbitMQ.Client.Events;
 using RawRabbit.Common;
 using RawRabbit.Configuration;
+using RawRabbit.Enrichers.GlobalExecutionId;
 using RawRabbit.Enrichers.MessageContext;
 using RawRabbit.Enrichers.MessageContext.Subscribe;
+using RawRabbit.Enrichers.QueueSuffix;
 using RawRabbit.Instantiation;
 using RawRabbit.Pipe;
 using RawRabbit.Pipe.Extensions;
@@ -26,7 +28,6 @@ namespace RawRabbit.Todo
 			RunAsync()
 				.GetAwaiter()
 				.GetResult();
-			
 		}
 
 		public static async Task RunAsync()
@@ -35,6 +36,9 @@ namespace RawRabbit.Todo
 			var busClient = RawRabbitFactory.CreateSingleton(new RawRabbitOptions
 			{
 				Plugins = p => p
+					.UseAttributeRouting()
+					.UseGlobalExecutionId()
+					.UseApplicationQueueSuffix()
 					.UseContextForwaring()
 					.UseMessageContext<TodoContext>()
 			});
@@ -46,7 +50,10 @@ namespace RawRabbit.Todo
 					return new Nack(false);
 				}
 				var created = await repo.AddAsync(msg.Todo);
-				await busClient.PublishAsync(new TodoCreated {Todo = created}, ctx => ctx.UsePublishAcknowledge(false));
+				await busClient.PublishAsync(new TodoCreated
+				{
+					Todo = created
+				}, ctx => ctx.UsePublishAcknowledge(false));
 				return new Ack();
 			});
 

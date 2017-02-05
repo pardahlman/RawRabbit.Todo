@@ -1,4 +1,6 @@
 ﻿using System;
+using RawRabbit.Configuration.Exchange;
+using RawRabbit.Enrichers.Attributes;
 
 namespace RawRabbit.Todo.Shared.Messages
 {

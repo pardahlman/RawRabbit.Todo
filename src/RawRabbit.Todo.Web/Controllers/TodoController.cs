@@ -9,7 +9,7 @@ namespace RawRabbit.Todo.Web.Controllers
 	public class TodoController : BaseController
 	{
 		public TodoController(IBusClient busClient) : base(busClient)
-		{ }
+		{}
 
 		[HttpGet]
 		[Route("api/todos/")]
@@ -36,9 +36,9 @@ namespace RawRabbit.Todo.Web.Controllers
 		public async Task<IActionResult> RemoveTodo(int id)
 		{
 			var msg = string.Empty;
-			var removeSequence = BusClient.ExecuteSequence<TodoContext, TodoRemoved>(s => s
+			var removeSequence = BusClient.ExecuteSequence(s => s
 				.PublishAsync(new RemoveTodo { Id = id})
-				.When<RemoveTodoFailed>((failed, ctx) =>
+				.When<RemoveTodoFailed, TodoContext>((failed, ctx) =>
 				{
 					msg = failed.Message;
 					return Task.CompletedTask;

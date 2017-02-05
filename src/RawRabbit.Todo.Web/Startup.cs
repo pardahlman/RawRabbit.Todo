@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using RawRabbit.Enrichers.GlobalExecutionId;
 using RawRabbit.Enrichers.MessageContext;
 using RawRabbit.Operations.StateMachine;
 using RawRabbit.Todo.Shared;
@@ -39,6 +40,8 @@ namespace RawRabbit.Todo.Web
 			{
 				Plugins = p => p
 					.UseMessageContext<TodoContext>()
+					.UseAttributeRouting()
+					.UseGlobalExecutionId()
 					.UseStateMachine()
 			});
 			services.AddSignalR(options =>
@@ -83,7 +86,6 @@ namespace RawRabbit.Todo.Web
 			});
 			app.UseDefaultFiles();
 			app.UseStaticFiles();
-
 
 			app.UseMvc(routes =>
 			{
