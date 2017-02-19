@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.SignalR.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using RawRabbit.Todo.Shared;
 using RawRabbit.Todo.Shared.Messages;
-using RawRabbit.Todo.Shared.Repo;
 using RawRabbit.Todo.Web.SignalR;
 
 namespace RawRabbit.Todo.Web

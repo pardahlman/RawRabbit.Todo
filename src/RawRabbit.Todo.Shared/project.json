@@ -3,7 +3,7 @@
 
   "dependencies": {
     "NETStandard.Library": "1.6.0",
-    "RawRabbit.Enrichers.Attributes": "2.0.0-beta2"
+    "RawRabbit.Enrichers.Attributes": "2.0.0-beta3"
   },
 
   "frameworks": {

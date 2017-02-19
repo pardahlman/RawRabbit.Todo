@@ -6,6 +6,6 @@ namespace RawRabbit.Todo.Shared
 	{
 		public string SessionId { get; set; }
 		public string Source { get; set; }
-		public Guid ExecutionId { get; set; }
+		public string ExecutionId { get; set; }
 	}
 }

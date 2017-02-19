@@ -6,16 +6,20 @@ using RawRabbit.Todo.Shared.Messages;
 
 namespace RawRabbit.Todo.Web.Controllers
 {
-	public class TodoController : BaseController
+	public class TodoController : Controller
 	{
-		public TodoController(IBusClient busClient) : base(busClient)
-		{}
+		private readonly IBusClient _busClient;
+
+		public TodoController(IBusClient busClient)
+		{
+			_busClient = busClient;
+		}
 
 		[HttpGet]
 		[Route("api/todos/")]
 		public async Task<IActionResult> GetAllTodos()
 		{
-			await PublishAsync(new CreateTodoList {Count = int.MaxValue});
+			await _busClient.PublishAsync(new CreateTodoList {Count = int.MaxValue});
 			return Ok(new {success = true});
 		}
 
@@ -23,7 +27,7 @@ namespace RawRabbit.Todo.Web.Controllers
 		[Route("api/todos/{id}")]
 		public async Task<IActionResult> GetTodo(int id)
 		{
-			var todo = await BusClient.RequestAsync<TodoRequest, TodoResponse>(new TodoRequest {Id = id});
+			var todo = await _busClient.RequestAsync<TodoRequest, TodoResponse>(new TodoRequest {Id = id});
 			if (todo == null)
 			{
 				return NotFound();
@@ -36,7 +40,7 @@ namespace RawRabbit.Todo.Web.Controllers
 		public async Task<IActionResult> RemoveTodo(int id)
 		{
 			var msg = string.Empty;
-			var removeSequence = BusClient.ExecuteSequence(s => s
+			var removeSequence = _busClient.ExecuteSequence(s => s
 				.PublishAsync(new RemoveTodo { Id = id})
 				.When<RemoveTodoFailed, TodoContext>((failed, ctx) =>
 				{
@@ -57,7 +61,7 @@ namespace RawRabbit.Todo.Web.Controllers
 		[Route("api/todos")]
 		public async Task<IActionResult> CreateTodo(Shared.Todo todo)
 		{
-			await PublishAsync(new CreateTodo {Todo = todo});
+			await _busClient.PublishAsync(new CreateTodo {Todo = todo});
 			return Ok(new {success = true});
 		}
 	}

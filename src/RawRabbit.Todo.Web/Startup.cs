@@ -1,16 +1,15 @@
 ﻿using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RawRabbit.Enrichers.GlobalExecutionId;
+using RawRabbit.Enrichers.HttpContext;
 using RawRabbit.Enrichers.MessageContext;
-using RawRabbit.Operations.StateMachine;
 using RawRabbit.Todo.Shared;
-using RawRabbit.Todo.Shared.Repo;
-using RawRabbit.Todo.Web.Controllers;
 using RawRabbit.Todo.Web.SignalR;
 using RawRabbit.vNext;
 using RawRabbit.vNext.Pipe;
@@ -31,24 +30,27 @@ namespace RawRabbit.Todo.Web
 
 		public IConfigurationRoot Configuration { get; }
 
-		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			// Add framework services.
 			services.AddMvc();
 			services.AddRawRabbit(new RawRabbitOptions
 			{
 				Plugins = p => p
-					.UseMessageContext<TodoContext>()
-					.UseAttributeRouting()
 					.UseGlobalExecutionId()
+					.UseHttpContext()
+					.UseMessageContext(ctx => new TodoContext
+					{
+						Source = ctx.GetHttpContext().Request.GetDisplayUrl(),
+						ExecutionId = ctx.GetGlobalExecutionId(),
+						SessionId = ctx.GetHttpContext().Request.Cookies[Constants.SessionCookie]
+					})
+					.UseAttributeRouting()
 					.UseStateMachine()
 			});
 			services.AddSignalR(options =>
 			{
 				options.Hubs.EnableDetailedErrors = true;
 			});
-			services.AddSingleton<ITodoRepository, TodoRepository>();
 			var serializer = JsonSerializer.Create(new JsonSerializerSettings
 			{
 				ContractResolver = new SignalRContractResolver()
@@ -58,7 +60,6 @@ namespace RawRabbit.Todo.Web
 				ServiceLifetime.Transient));
 		}
 
-		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
 		{
 			loggerFactory.AddConsole(Configuration.GetSection("Logging"));
@@ -76,12 +77,12 @@ namespace RawRabbit.Todo.Web
 
 			app.Use((context, func) =>
 			{
-				if (context.Request.Cookies.ContainsKey(BaseController.SessionCookie))
+				if (context.Request.Cookies.ContainsKey(Constants.SessionCookie))
 				{
 					return func();
 				}
 				var sessionId = Guid.NewGuid().ToString("D");
-				context.Response.Cookies.Append(BaseController.SessionCookie, sessionId);
+				context.Response.Cookies.Append(Constants.SessionCookie, sessionId);
 				return func();
 			});
 			app.UseDefaultFiles();

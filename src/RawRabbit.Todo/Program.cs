@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using RabbitMQ.Client.Events;
 using RawRabbit.Common;
-using RawRabbit.Configuration;
 using RawRabbit.Enrichers.GlobalExecutionId;
 using RawRabbit.Enrichers.MessageContext;
 using RawRabbit.Enrichers.MessageContext.Subscribe;
@@ -17,7 +15,6 @@ using RawRabbit.Pipe.Extensions;
 using RawRabbit.Pipe.Middleware;
 using RawRabbit.Todo.Shared;
 using RawRabbit.Todo.Shared.Messages;
-using RawRabbit.Todo.Shared.Repo;
 
 namespace RawRabbit.Todo
 {
@@ -39,7 +36,7 @@ namespace RawRabbit.Todo
 					.UseAttributeRouting()
 					.UseGlobalExecutionId()
 					.UseApplicationQueueSuffix()
-					.UseContextForwaring()
+					.UseContextForwarding()
 					.UseMessageContext<TodoContext>()
 			});
 
