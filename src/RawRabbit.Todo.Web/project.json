@@ -19,19 +19,19 @@
 			"type": "platform"
 		},
 		"Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0",
-		"RawRabbit": "2.0.0-beta3",
-		"RawRabbit.Enrichers.GlobalExecutionId": "2.0.0-beta3",
-		"RawRabbit.Enrichers.QueueSuffix": "2.0.0-beta3",
-		"RawRabbit.Enrichers.MessageContext": "2.0.0-beta3",
-		"RawRabbit.Enrichers.MessageContext.Subscribe": "2.0.0-beta3",
-    "RawRabbit.Logging.Serilog": "2.0.0-beta3",
-		"RawRabbit.Operations.MessageSequence": "2.0.0-beta3",
-		"RawRabbit.Operations.Publish": "2.0.0-beta3",
-		"RawRabbit.Operations.Request": "2.0.0-beta3",
+		"RawRabbit.Enrichers.QueueSuffix": "2.0.0-beta5",
+		"RawRabbit.Enrichers.MessageContext.Subscribe": "2.0.0-beta5",
+    "RawRabbit.Logging.Serilog": "2.0.0-beta5",
+		"RawRabbit.Operations.MessageSequence": "2.0.0-beta5",
+		"RawRabbit.Operations.Publish": "2.0.0-beta5",
+		"RawRabbit.Operations.Request": "2.0.0-beta5",
 		"RawRabbit.Todo.Shared": { "target": "project" },
-    "RawRabbit.vNext": "2.0.0-beta3",
-    "RawRabbit.Enrichers.Attributes": "2.0.0-beta3",
-    "RawRabbit.Enrichers.HttpContext": "2.0.0-beta3"
+    "RawRabbit.vNext": "2.0.0-beta5",
+    "RawRabbit": "2.0.0-beta5",
+			"RawRabbit.Enrichers.Attributes": "2.0.0-beta5",
+			"RawRabbit.Enrichers.GlobalExecutionId": "2.0.0-beta5",
+			"RawRabbit.Enrichers.HttpContext": "2.0.0-beta5",
+			"RawRabbit.Enrichers.MessageContext": "2.0.0-beta5"
 	},
 
 	"tools": {
