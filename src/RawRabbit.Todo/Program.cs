@@ -11,7 +11,6 @@ using RawRabbit.Enrichers.MessageContext.Subscribe;
 using RawRabbit.Enrichers.QueueSuffix;
 using RawRabbit.Instantiation;
 using RawRabbit.Pipe;
-using RawRabbit.Pipe.Extensions;
 using RawRabbit.Pipe.Middleware;
 using RawRabbit.Todo.Shared;
 using RawRabbit.Todo.Shared.Messages;
