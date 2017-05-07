@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp1.0</TargetFramework>
+    <AssemblyName>RawRabbit.Todo</AssemblyName>
+    <OutputType>Exe</OutputType>
+    <PackageId>RawRabbit.Todo</PackageId>
+    <RuntimeFrameworkVersion>1.0.4</RuntimeFrameworkVersion>
+    <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RawRabbit.Todo.Shared\RawRabbit.Todo.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="RabbitMQ.Client" Version="4.1.1" />
+    <PackageReference Include="RawRabbit" Version="2.0.0-beta5" />
+    <PackageReference Include="RawRabbit.Enrichers.Attributes" Version="2.0.0-beta5" />
+    <PackageReference Include="RawRabbit.Enrichers.GlobalExecutionId" Version="2.0.0-beta5" />
+    <PackageReference Include="RawRabbit.Enrichers.MessageContext" Version="2.0.0-beta5" />
+    <PackageReference Include="RawRabbit.Enrichers.MessageContext.Subscribe" Version="2.0.0-beta5" />
+    <PackageReference Include="RawRabbit.Enrichers.QueueSuffix" Version="2.0.0-beta5" />
+    <PackageReference Include="RawRabbit.Logging.Serilog" Version="2.0.0-beta5" />
+    <PackageReference Include="RawRabbit.Operations.Publish" Version="2.0.0-beta5" />
+    <PackageReference Include="RawRabbit.Operations.Respond" Version="2.0.0-beta5" />
+  </ItemGroup>
+
+</Project>
