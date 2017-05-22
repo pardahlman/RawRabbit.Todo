@@ -10,6 +10,8 @@ using RawRabbit.Enrichers.MessageContext;
 using RawRabbit.Enrichers.MessageContext.Subscribe;
 using RawRabbit.Enrichers.QueueSuffix;
 using RawRabbit.Instantiation;
+using RawRabbit.Logging;
+using RawRabbit.Logging.Serilog;
 using RawRabbit.Pipe;
 using RawRabbit.Pipe.Middleware;
 using RawRabbit.Todo.Shared;
@@ -38,6 +40,7 @@ namespace RawRabbit.Todo
 					.UseContextForwarding()
 					.UseMessageContext<TodoContext>()
 			});
+			LogManager.CurrentFactory = new RawRabbit.Logging.LoggerFactory(s => new ConsoleLogger(LogLevel.Debug, s));
 
 			await busClient.SubscribeAsync<CreateTodo, TodoContext>(async (msg, context) =>
 			{

@@ -12,6 +12,7 @@ using RawRabbit.Enrichers.MessageContext;
 using RawRabbit.Todo.Shared;
 using RawRabbit.Todo.Web.SignalR;
 using RawRabbit.vNext;
+using RawRabbit.vNext.Logging;
 using RawRabbit.vNext.Pipe;
 
 namespace RawRabbit.Todo.Web
@@ -45,7 +46,8 @@ namespace RawRabbit.Todo.Web
 						SessionId = ctx.GetHttpContext().Request.Cookies[Constants.SessionCookie]
 					})
 					.UseAttributeRouting()
-					.UseStateMachine()
+					.UseStateMachine(),
+				DependencyInjection = ioc => ioc.AddSingleton(LoggingFactory.ApplicationLogger)
 			});
 			services.AddSignalR(options =>
 			{
