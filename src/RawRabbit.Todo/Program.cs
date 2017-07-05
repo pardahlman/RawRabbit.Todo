@@ -38,9 +38,10 @@ namespace RawRabbit.Todo
 					.UseGlobalExecutionId()
 					.UseApplicationQueueSuffix()
 					.UseContextForwarding()
-					.UseMessageContext<TodoContext>()
+					.UseMessageContext<TodoContext>(),
+				DependencyInjection =  di => di
+					.AddSingleton<ILoggerFactory>(new RawRabbit.Logging.LoggerFactory(s => new ConsoleLogger(LogLevel.Debug, s)))
 			});
-			LogManager.CurrentFactory = new RawRabbit.Logging.LoggerFactory(s => new ConsoleLogger(LogLevel.Debug, s));
 
 			await busClient.SubscribeAsync<CreateTodo, TodoContext>(async (msg, context) =>
 			{
