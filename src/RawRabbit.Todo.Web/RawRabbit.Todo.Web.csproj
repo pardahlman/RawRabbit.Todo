@@ -36,23 +36,17 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="1.0.2" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="1.0.2" />
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="1.0.1" />
-    <PackageReference Include="RawRabbit.Enrichers.QueueSuffix" Version="2.0.0-beta7" />
-    <PackageReference Include="RawRabbit.Enrichers.MessageContext.Subscribe" Version="2.0.0-beta7" />
-    <PackageReference Include="RawRabbit.Logging.Serilog" Version="2.0.0-beta7" />
-    <PackageReference Include="RawRabbit.Operations.MessageSequence" Version="2.0.0-beta7" />
-    <PackageReference Include="RawRabbit.Operations.Publish" Version="2.0.0-beta7" />
-    <PackageReference Include="RawRabbit.Operations.Request" Version="2.0.0-beta7" />
-    <PackageReference Include="RawRabbit.vNext" Version="2.0.0-beta7" />
-    <PackageReference Include="RawRabbit" Version="2.0.0-beta7" />
-    <PackageReference Include="RawRabbit.Enrichers.Attributes" Version="2.0.0-beta7" />
-    <PackageReference Include="RawRabbit.Enrichers.GlobalExecutionId" Version="2.0.0-beta7" />
-    <PackageReference Include="RawRabbit.Enrichers.HttpContext" Version="2.0.0-beta7" />
-    <PackageReference Include="RawRabbit.Enrichers.MessageContext" Version="2.0.0-beta7" />
+    <PackageReference Include="RawRabbit.Enrichers.QueueSuffix" Version="2.0.0-beta8" />
+    <PackageReference Include="RawRabbit.Enrichers.MessageContext.Subscribe" Version="2.0.0-beta8" />
+    <PackageReference Include="RawRabbit.Operations.Publish" Version="2.0.0-beta8" />
+    <PackageReference Include="RawRabbit.Operations.Request" Version="2.0.0-beta8" />
+    <PackageReference Include="RawRabbit.DependencyInjection.ServiceCollection" Version="2.0.0-beta8" />
+    <PackageReference Include="RawRabbit" Version="2.0.0-beta8" />
+    <PackageReference Include="RawRabbit.Enrichers.Attributes" Version="2.0.0-beta8" />
+    <PackageReference Include="RawRabbit.Enrichers.GlobalExecutionId" Version="2.0.0-beta8" />
+    <PackageReference Include="RawRabbit.Enrichers.HttpContext" Version="2.0.0-beta8" />
+    <PackageReference Include="RawRabbit.Enrichers.MessageContext" Version="2.0.0-beta8" />
+    <PackageReference Include="RawRabbit.Operations.MessageSequence" Version="2.0.0-beta8" />
+    <PackageReference Include="Serilog.Sinks.Literate" Version="3.0.0" />
   </ItemGroup>
-
-  <Target Name="PrepublishScript" BeforeTargets="PrepareForPublish">
-    <Exec Command="bower install" />
-    <Exec Command="dotnet bundle" />
-  </Target>
-
 </Project>

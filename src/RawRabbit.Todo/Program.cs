@@ -10,12 +10,11 @@ using RawRabbit.Enrichers.MessageContext;
 using RawRabbit.Enrichers.MessageContext.Subscribe;
 using RawRabbit.Enrichers.QueueSuffix;
 using RawRabbit.Instantiation;
-using RawRabbit.Logging;
-using RawRabbit.Logging.Serilog;
 using RawRabbit.Pipe;
 using RawRabbit.Pipe.Middleware;
 using RawRabbit.Todo.Shared;
 using RawRabbit.Todo.Shared.Messages;
+using Serilog;
 
 namespace RawRabbit.Todo
 {
@@ -30,7 +29,10 @@ namespace RawRabbit.Todo
 
 		public static async Task RunAsync()
 		{
-			var repo = new TodoRepository();
+		  Log.Logger = new LoggerConfiguration()
+		    .WriteTo.LiterateConsole()
+		    .CreateLogger();
+      var repo = new TodoRepository();
 			var busClient = RawRabbitFactory.CreateSingleton(new RawRabbitOptions
 			{
 				Plugins = p => p
@@ -38,9 +40,7 @@ namespace RawRabbit.Todo
 					.UseGlobalExecutionId()
 					.UseApplicationQueueSuffix()
 					.UseContextForwarding()
-					.UseMessageContext<TodoContext>(),
-				DependencyInjection =  di => di
-					.AddSingleton<ILoggerFactory>(new RawRabbit.Logging.LoggerFactory(s => new ConsoleLogger(LogLevel.Debug, s)))
+					.UseMessageContext<TodoContext>()
 			});
 
 			await busClient.SubscribeAsync<CreateTodo, TodoContext>(async (msg, context) =>
@@ -80,7 +80,7 @@ namespace RawRabbit.Todo
 				.UseMessageContext(c => c.GetDeliveryEventArgs())
 				.UseConsumerConfiguration(cfg => cfg
 					.Consume(c => c
-						.WithNoAck()
+						.WithAutoAck()
 						.WithPrefetchCount(1))
 					.FromDeclaredQueue(q => q
 						.WithName("remove_todo")

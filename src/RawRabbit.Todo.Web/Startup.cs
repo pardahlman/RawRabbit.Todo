@@ -6,14 +6,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using RawRabbit.DependencyInjection.ServiceCollection;
 using RawRabbit.Enrichers.GlobalExecutionId;
 using RawRabbit.Enrichers.HttpContext;
 using RawRabbit.Enrichers.MessageContext;
+using RawRabbit.Instantiation;
 using RawRabbit.Todo.Shared;
 using RawRabbit.Todo.Web.SignalR;
-using RawRabbit.vNext;
-using RawRabbit.vNext.Logging;
-using RawRabbit.vNext.Pipe;
+using Serilog;
 
 namespace RawRabbit.Todo.Web
 {
@@ -47,7 +47,6 @@ namespace RawRabbit.Todo.Web
 					})
 					.UseAttributeRouting()
 					.UseStateMachine(),
-				DependencyInjection = ioc => ioc.AddSingleton(LoggingFactory.ApplicationLogger)
 			});
 			services.AddSignalR(options =>
 			{
@@ -64,6 +63,9 @@ namespace RawRabbit.Todo.Web
 
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
 		{
+			Log.Logger = new LoggerConfiguration()
+				.WriteTo.LiterateConsole()
+				.CreateLogger();
 			loggerFactory.AddConsole(Configuration.GetSection("Logging"));
 			loggerFactory.AddDebug();
 
