@@ -17,8 +17,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RawRabbit.Todo.Web", "src\R
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RawRabbit.Todo", "src\RawRabbit.Todo\RawRabbit.Todo.csproj", "{F2DC3B43-D04B-438E-8D28-AD5C42463617}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RawRabbit.Foo", "RawRabbit.Foo\RawRabbit.Foo.csproj", "{7589BBD3-EA98-443E-ABC1-74B53A724C73}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,10 +35,6 @@ Global
 		{F2DC3B43-D04B-438E-8D28-AD5C42463617}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F2DC3B43-D04B-438E-8D28-AD5C42463617}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F2DC3B43-D04B-438E-8D28-AD5C42463617}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7589BBD3-EA98-443E-ABC1-74B53A724C73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7589BBD3-EA98-443E-ABC1-74B53A724C73}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7589BBD3-EA98-443E-ABC1-74B53A724C73}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7589BBD3-EA98-443E-ABC1-74B53A724C73}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -49,7 +43,6 @@ Global
 		{3FDCA370-DB4C-424D-BDC7-68116FB7F6C6} = {2BA0E34E-D47A-4470-B1FE-A063666F3A29}
 		{5927AA8F-B855-4228-A216-3C6976C33DFE} = {2BA0E34E-D47A-4470-B1FE-A063666F3A29}
 		{F2DC3B43-D04B-438E-8D28-AD5C42463617} = {2BA0E34E-D47A-4470-B1FE-A063666F3A29}
-		{7589BBD3-EA98-443E-ABC1-74B53A724C73} = {2BA0E34E-D47A-4470-B1FE-A063666F3A29}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CF27241A-1121-4F7A-8C99-EA76203A9678}
