@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using RabbitMQ.Client.Events;
 using RawRabbit.Common;
+using RawRabbit.Configuration.Queue;
 using RawRabbit.Enrichers.GlobalExecutionId;
 using RawRabbit.Enrichers.MessageContext;
 using RawRabbit.Enrichers.MessageContext.Subscribe;
@@ -29,10 +30,10 @@ namespace RawRabbit.Todo
 
 		public static async Task RunAsync()
 		{
-		  Log.Logger = new LoggerConfiguration()
-		    .WriteTo.LiterateConsole()
-		    .CreateLogger();
-      var repo = new TodoRepository();
+			Log.Logger = new LoggerConfiguration()
+			  .WriteTo.LiterateConsole()
+			  .CreateLogger();
+			var repo = new TodoRepository();
 			var busClient = RawRabbitFactory.CreateSingleton(new RawRabbitOptions
 			{
 				Plugins = p => p
@@ -78,7 +79,7 @@ namespace RawRabbit.Todo
 					});
 				}, ctx => ctx
 				.UseMessageContext(c => c.GetDeliveryEventArgs())
-				.UseConsumerConfiguration(cfg => cfg
+				.UseSubscribeConfiguration(cfg => cfg
 					.Consume(c => c
 						.WithAutoAck()
 						.WithPrefetchCount(1))
@@ -89,6 +90,11 @@ namespace RawRabbit.Todo
 					))
 			);
 
+			await busClient.DeclareQueueAsync(new QueueDeclaration
+			{
+				Name = "new_owner_evaluation",
+				AutoDelete = true,
+			});
 			await busClient.BasicConsumeAsync(async args =>
 			{
 				var created = JsonConvert.DeserializeObject<TodoCreated>(Encoding.UTF8.GetString(args.Body));
@@ -104,14 +110,11 @@ namespace RawRabbit.Todo
 				}
 				return new Ack();
 			}, ctx => ctx
-				.UseConsumerConfiguration(cfg => cfg
-					.Consume(c => c
+				.UseConsumeConfiguration(cfg => cfg
 						.WithRoutingKey("todocreated.#")
 						.OnExchange("rawrabbit.todo.shared.messages")
+						.FromQueue("new_owner_evaluation")
 					)
-					.FromDeclaredQueue(q => q
-						.WithName("new_owner_evaluation")
-					))
 			);
 
 			await busClient.RespondAsync<TodoRequest, TodoResponse>(async req =>
