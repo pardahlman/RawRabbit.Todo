@@ -12,15 +12,15 @@
 
   <ItemGroup>
     <PackageReference Include="RabbitMQ.Client" Version="5.0.1" />
-    <PackageReference Include="RawRabbit" Version="2.0.0-rc1" />
-    <PackageReference Include="RawRabbit.Enrichers.Attributes" Version="2.0.0-rc1" />
-    <PackageReference Include="RawRabbit.Enrichers.GlobalExecutionId" Version="2.0.0-rc1" />
-    <PackageReference Include="RawRabbit.Enrichers.MessageContext" Version="2.0.0-rc1" />
-    <PackageReference Include="RawRabbit.Enrichers.MessageContext.Subscribe" Version="2.0.0-rc1" />
-    <PackageReference Include="RawRabbit.Enrichers.QueueSuffix" Version="2.0.0-rc1" />
-    <PackageReference Include="RawRabbit.Operations.Publish" Version="2.0.0-rc1" />
-    <PackageReference Include="RawRabbit.Operations.Respond" Version="2.0.0-rc1" />
-    <PackageReference Include="RawRabbit.Operations.Tools" Version="2.0.0-rc1" />
+    <PackageReference Include="RawRabbit" Version="2.0.0-rc2" />
+    <PackageReference Include="RawRabbit.Enrichers.Attributes" Version="2.0.0-rc2" />
+    <PackageReference Include="RawRabbit.Enrichers.GlobalExecutionId" Version="2.0.0-rc2" />
+    <PackageReference Include="RawRabbit.Enrichers.MessageContext" Version="2.0.0-rc2" />
+    <PackageReference Include="RawRabbit.Enrichers.MessageContext.Subscribe" Version="2.0.0-rc2" />
+    <PackageReference Include="RawRabbit.Enrichers.QueueSuffix" Version="2.0.0-rc2" />
+    <PackageReference Include="RawRabbit.Operations.Publish" Version="2.0.0-rc2" />
+    <PackageReference Include="RawRabbit.Operations.Respond" Version="2.0.0-rc2" />
+    <PackageReference Include="RawRabbit.Operations.Tools" Version="2.0.0-rc2" />
     <PackageReference Include="Serilog.Sinks.Literate" Version="3.0.0" />
   </ItemGroup>
 
